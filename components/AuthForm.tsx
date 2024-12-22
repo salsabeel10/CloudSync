@@ -15,6 +15,7 @@ import {
 import { Input } from '@/components/ui/input'
 import Image from 'next/image'
 import Link from 'next/link'
+import { createAccount } from '@/lib/actions/user.action'
 
 type FormType = 'sign-in' | 'sign-up'
 
@@ -31,7 +32,8 @@ const authFormSchema = (formType: FormType) => {
 const AuthForm = ({ type }: { type: FormType }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [errorMsg, setErrorMSg] = useState("")
-  
+  const [accountID, setAccountID] = useState(null)
+
   const formSchema = authFormSchema(type)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,8 +44,17 @@ const AuthForm = ({ type }: { type: FormType }) => {
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values)
-  }
+    setIsLoading(true);
+    setErrorMSg("")
+    try{
+      const user =await createAccount({fullName:values.fullName||" ",email:values.email})
+      setAccountID(user.accountID)
+    }catch{
+      setErrorMSg("failed to create account")
+    }finally{
+      setIsLoading(false);
+    }
+    }
   return (
     <>
       <Form {...form}>

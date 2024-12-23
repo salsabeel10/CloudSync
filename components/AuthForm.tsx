@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input'
 import Image from 'next/image'
 import Link from 'next/link'
 import { createAccount } from '@/lib/actions/user.action'
+import OTPModal from './OTPModal'
 
 type FormType = 'sign-in' | 'sign-up'
 
@@ -135,9 +136,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
           </div>
         </form>
       </Form>
-      {/* Otp Verification */}
+      {true && (<OTPModal email={form.getValues("email")} accountID={accountID} />)}
     </>
-  )
-}
+  );
+};
 
 export default AuthForm
